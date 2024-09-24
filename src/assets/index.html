@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head> </head>
+  <body>
+    <main class="navbar-container">
+      <nav>
+        <div class="flex items-center">
+          <img class="avatar" src="{{avatar}}" alt="{{username}}'s avatar" />
+        </div>
+        <div>
+          <h1 class="nav-text">INTERRUPTED</h1>
+        </div>
+        <div class="logout">
+          <h1 id="logout" class="nav-text">Logout</h1>
+        </div>
+      </nav>
+    </main>
+    <div class="upload-container">
+      <div class="user-info">
+        <h2>Welcome back {{username}}!</h2>
+        <p>Upload your files here</p>
+      </div>
+      <div class="upload">
+        <div>
+          <button id="select-file">Select file</button>
+        </div>
+        <div>
+          <button id="capture-screenshot">Capture screenshot</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      const logout = document.getElementById("logout");
+      logout.addEventListener("click", () => {
+        window.logOut();
+      });
+
+      const selectFile = document.getElementById("select-file");
+      selectFile.addEventListener("click", () => {
+        window.selectFile().then((response) => {
+          alert(response);
+        });
+      });
+
+      const captureButton = document.getElementById("capture-screenshot");
+      captureButton.addEventListener("click", () => {
+        monitor = prompt(
+          "Enter the monitor number to capture screenshot (Primary is usually 0)",
+          0
+        );
+
+        if (monitor === null || isNaN(monitor)) {
+          alert("Invalid monitor number");
+          return;
+        }
+        window.captureScreenshot(monitor).then((response) => {
+          alert(response);
+        });
+      });
+    </script>
+  </body>
+</html>
