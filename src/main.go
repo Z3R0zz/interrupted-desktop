@@ -34,6 +34,8 @@ func main() {
 		log.Printf("Warning: %v", err)
 	}
 
+	// TODO: Remove this check and instead prompt for API key in the webview
+
 	if apiKey == "" {
 		log.Print("API Key not found.")
 		apiKey, err = data.PromptForApiKey()
