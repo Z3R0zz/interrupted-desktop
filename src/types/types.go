@@ -31,3 +31,13 @@ type LoginResponse struct {
 		ApiKey string
 	} `json:"data"`
 }
+
+type GalleryResponse struct {
+	Status  string      `json:"status"`
+	Message interface{} `json:"message"`
+	Data    []ImageData `json:"data"`
+}
+
+type ImageData struct {
+	URL string `json:"url"`
+}

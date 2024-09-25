@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
-  <head> </head>
+  <head>
+    <link rel="stylesheet" href="index.css" />
+  </head>
   <body>
     <div>
       <div class="gradient-top-left"></div>
@@ -20,22 +22,30 @@
         </div>
       </nav>
     </main>
-    <div class="upload-container">
-      <div class="upload-contents">
-        <div class="user-info">
-          <h2>Welcome back {{username}}!</h2>
-          <p>Upload your files here</p>
-        </div>
-        <div class="upload">
-          <div>
-            <button id="select-file">Select file</button>
+    <main class="main-content">
+      <div id="dashboard-content" class="upload-container dashboard">
+        <div class="upload-contents">
+          <div class="user-info">
+            <h2>Welcome back {{username}}!</h2>
+            <p>Upload your files here</p>
           </div>
-          <div>
-            <button id="capture-screenshot">Capture screenshot</button>
+          <div class="upload">
+            <div>
+              <button id="select-file">Select file</button>
+            </div>
+            <div>
+              <button id="capture-screenshot">Capture screenshot</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      <div id="gallery-content" class="upload-container gallery">
+        <div class="gallery-contents">
+          <h1>gallery</h1>
+          <div class="images"></div>
+        </div>
+      </div>
+    </main>
     <script>
       const logout = document.getElementById("logout");
       logout.addEventListener("click", () => {
@@ -62,6 +72,30 @@
         }
         window.captureScreenshot(monitor).then((response) => {
           alert(response);
+        });
+      });
+
+      document.addEventListener("DOMContentLoaded", (event) => {
+        window.fetchGallery().then((response) => {
+          if (response.length > 0) {
+            const imagesContainer = document.querySelector(".images");
+
+            response.forEach((image) => {
+              const img = document.createElement("img");
+              img.src = image.url;
+
+              img.setAttribute("data-url", image.url);
+
+              img.addEventListener("click", (event) => {
+                const clickedImageUrl = event.target.getAttribute("data-url");
+                window.copyToClipboard(clickedImageUrl).then((response) => {
+                  alert(response);
+                });
+              });
+
+              imagesContainer.appendChild(img);
+            });
+          }
         });
       });
     </script>

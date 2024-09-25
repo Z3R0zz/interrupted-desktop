@@ -72,13 +72,43 @@ func showDefaultView(apiKey string) {
 	w := webview.New(debug)
 	defer w.Destroy()
 	w.SetTitle("Interrupted.me")
-	w.SetSize(1080, 800, webview.HintNone)
+	w.SetSize(1920, 1080, webview.HintNone)
 
 	w.Navigate("data:text/html," + htmlWithCSS)
 
 	w.Bind("logOut", func() {
 		data.DeleteApiKey()
 		w.Terminate()
+	})
+
+	w.Bind("fetchGallery", func() interface{} {
+		requestURL := fmt.Sprintf("http://127.0.0.1:8000/api/gallery/%v", apiKey)
+		res, err := http.Get(requestURL)
+		if err != nil {
+			fmt.Printf("error making http request: %s\n", err)
+			return "Error making http request"
+		}
+
+		defer res.Body.Close()
+		body, err := io.ReadAll(res.Body)
+		if err != nil {
+			fmt.Printf("error reading response body: %s\n", err)
+			return "Error reading response body"
+		}
+
+		if res.StatusCode != 200 {
+			fmt.Printf("API error: %s\n", string(body))
+			return "API error"
+		}
+
+		var galleryResp types.GalleryResponse
+		err = json.Unmarshal(body, &galleryResp)
+		if err != nil {
+			fmt.Printf("error unmarshalling response body: %s\n", err)
+			return "Error parsing gallery response"
+		}
+
+		return galleryResp.Data
 	})
 
 	w.Bind("selectFile", func() string {
@@ -99,6 +129,16 @@ func showDefaultView(apiKey string) {
 		clipboard.Write(clipboard.FmtText, []byte(url))
 
 		return "Screenshot uploaded and URL copied to clipboard!"
+	})
+
+	w.Bind("copyToClipboard", func(url string) string {
+		if url == "" {
+			return "No URL provided"
+		}
+
+		clipboard.Write(clipboard.FmtText, []byte(url))
+
+		return "URL copied to clipboard!"
 	})
 
 	w.Bind("captureScreenshot", func(param string) string {
