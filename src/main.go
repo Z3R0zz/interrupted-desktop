@@ -2,11 +2,16 @@ package main
 
 import (
 	"embed"
+	"encoding/json"
 	"fmt"
 	"image/png"
 	"interrupted-desktop/src/data"
+	"interrupted-desktop/src/types"
 	"interrupted-desktop/src/uploads"
+	"io"
 	"log"
+	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -34,20 +39,17 @@ func main() {
 		log.Printf("Warning: %v", err)
 	}
 
-	// TODO: Remove this check and instead prompt for API key in the webview
-
 	if apiKey == "" {
-		log.Print("API Key not found.")
-		apiKey, err = data.PromptForApiKey()
-		if err != nil {
-			log.Fatalf("Failed to prompt for API key: %v", err)
-		}
-
-		if err := data.SaveApiKey(apiKey); err != nil {
-			log.Fatalf("Failed to save API key: %v", err)
+		apiKey = showLoginView()
+		if apiKey == "" {
+			return
 		}
 	}
 
+	showDefaultView(apiKey)
+}
+
+func showDefaultView(apiKey string) {
 	user := data.GetUserData(apiKey)
 
 	htmlContent, err := assets.ReadFile("assets/index.html")
@@ -151,4 +153,83 @@ func main() {
 	})
 
 	w.Run()
+}
+
+func showLoginView() string {
+	htmlContent, err := assets.ReadFile("assets/auth/login.html")
+	if err != nil {
+		log.Fatalf("Failed to read HTML file: %v", err)
+	}
+
+	cssContent, err := assets.ReadFile("assets/auth/login.css")
+	if err != nil {
+		log.Fatalf("Failed to read CSS file: %v", err)
+	}
+
+	htmlWithCSS := string(htmlContent) +
+		"<style>" + string(cssContent) + " /* cache-buster: " + fmt.Sprint(time.Now().UnixNano()) + " */" + "</style>"
+
+	debug := true
+	w := webview.New(debug)
+	defer w.Destroy()
+	w.SetTitle("Interrupted.me")
+	w.SetSize(1080, 800, webview.HintNone)
+
+	var apiKey string
+
+	w.Navigate("data:text/html," + htmlWithCSS)
+
+	w.Bind("logOut", func() {
+		w.Terminate()
+	})
+
+	w.Bind("login", func(username string, password string) string {
+		formData := url.Values{
+			"username": {username},
+			"password": {password},
+		}
+
+		res, err := http.PostForm("http://127.0.0.1:8000/api/login", formData)
+		if err != nil {
+			fmt.Printf("error making http request: %s\n", err)
+			return "Error making http request"
+		}
+
+		defer res.Body.Close()
+		body, err := io.ReadAll(res.Body)
+		if err != nil {
+			fmt.Printf("error reading response body: %s\n", err)
+			return "Error reading response body"
+		}
+
+		var loginResponse types.LoginResponse
+		err = json.Unmarshal(body, &loginResponse)
+		if err != nil {
+			fmt.Printf("error unmarshalling response body: %s\n", err)
+			return "Error unmarshalling response body"
+		}
+
+		if res.StatusCode != 200 {
+			if loginResponse.Message != nil {
+				fmt.Printf("API error: %s\n", *loginResponse.Message)
+				return *loginResponse.Message
+			} else {
+				fmt.Printf("API error: unknown error\n")
+				return "Unknown error"
+			}
+		}
+
+		if err := data.SaveApiKey(loginResponse.Data.ApiKey); err != nil {
+			log.Fatalf("Failed to save API key: %v", err)
+			return "Failed to save API key"
+		}
+
+		apiKey = loginResponse.Data.ApiKey
+		w.Terminate()
+		return apiKey
+	})
+
+	w.Run()
+
+	return apiKey
 }

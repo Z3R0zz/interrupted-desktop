@@ -23,3 +23,11 @@ type File struct {
 	URL       string `json:"url"`
 	DeleteURL string `json:"delete_url"`
 }
+
+type LoginResponse struct {
+	Status  string  `json:"status"`
+	Message *string `json:"message"`
+	Data    struct {
+		ApiKey string
+	} `json:"data"`
+}
