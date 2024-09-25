@@ -10,11 +10,11 @@ import (
 	"interrupted-desktop/src/uploads"
 	"io"
 	"log"
+	"math/rand"
 	"net/http"
 	"net/url"
 	"os"
 	"path/filepath"
-	"strconv"
 	"strings"
 	"time"
 
@@ -44,6 +44,11 @@ func main() {
 		if apiKey == "" {
 			return
 		}
+	}
+
+	err = data.ClearAppData()
+	if err != nil {
+		log.Printf("Warning: %v", err)
 	}
 
 	showDefaultView(apiKey)
@@ -122,14 +127,16 @@ func showDefaultView(apiKey string) {
 	})
 
 	w.Bind("selectFile", func() string {
-		fmt.Println("Select file")
 		filePath, err := dialog.File().Title("Select a file").Load()
 		if err != nil {
 			fmt.Println("Error selecting file:", err)
-			return ""
+			return "No file selected"
 		}
 
-		url := uploads.UploadFile(filePath, apiKey)
+		fileExtension := filepath.Ext(filePath)
+		fileName := fmt.Sprintf("%s.%s", randomString(10), fileExtension)
+
+		url := uploads.UploadFile(filePath, fileName, apiKey)
 
 		if url == "" {
 			fmt.Println("Error uploading file")
@@ -138,7 +145,7 @@ func showDefaultView(apiKey string) {
 
 		clipboard.Write(clipboard.FmtText, []byte(url))
 
-		return "Screenshot uploaded and URL copied to clipboard!"
+		return fmt.Sprintf("Screenshot '%s' uploaded and URL copied to clipboard!", fileName)
 	})
 
 	w.Bind("copyToClipboard", func(url string) string {
@@ -151,36 +158,30 @@ func showDefaultView(apiKey string) {
 		return "URL copied to clipboard!"
 	})
 
-	w.Bind("captureScreenshot", func(param string) string {
-		i, err := strconv.Atoi(param)
-		if err != nil {
-			fmt.Println("Error converting parameter to int:", err)
-			return "Error converting parameter to int"
-		}
-
+	w.Bind("captureScreenshot", func(index int) string {
 		numDisplays := screenshot.NumActiveDisplays()
-		if i >= numDisplays || i < 0 {
-			fmt.Println("Invalid display index")
+		if index >= numDisplays || index < 0 {
 			return "Invalid display index"
 		}
 
-		bounds := screenshot.GetDisplayBounds(i)
+		bounds := screenshot.GetDisplayBounds(index)
 		img, err := screenshot.CaptureRect(bounds)
 		if err != nil {
-			fmt.Println("Error capturing screenshot:", err)
 			return "Error capturing screenshot"
 		}
 
-		fileName := fmt.Sprintf("screenshot-%d.png", time.Now().Unix())
+		fileName := fmt.Sprintf("%s.png", randomString(10))
+
 		appDataPath, err := data.GetAppDataPath()
 		if err != nil {
 			fmt.Println("Error getting app data path:", err)
 			return "Error getting app data path"
 		}
 
-		savepath := filepath.Join(appDataPath, data.Subdirectory)
+		savePath := filepath.Join(appDataPath, data.Subdirectory)
+		os.MkdirAll(savePath, os.ModePerm)
 
-		file, err := os.Create(filepath.Join(savepath, fileName))
+		file, err := os.Create(filepath.Join(savePath, fileName))
 		if err != nil {
 			fmt.Println("Error saving screenshot:", err)
 			return "Error saving screenshot"
@@ -189,8 +190,8 @@ func showDefaultView(apiKey string) {
 
 		png.Encode(file, img)
 
-		filepath := filepath.Join(savepath, fileName)
-		url := uploads.UploadFile(filepath, apiKey)
+		filePath := filepath.Join(savePath, fileName)
+		url := uploads.UploadFile(filePath, fileName, apiKey)
 
 		if url == "" {
 			fmt.Println("Error uploading file")
@@ -199,7 +200,20 @@ func showDefaultView(apiKey string) {
 
 		clipboard.Write(clipboard.FmtText, []byte(url))
 
-		return "Screenshot uploaded and URL copied to clipboard!"
+		return fmt.Sprintf("Screenshot '%s' uploaded and URL copied to clipboard!", fileName)
+	})
+
+	w.Bind("fetchMonitors", func() interface{} {
+		numDisplays := screenshot.NumActiveDisplays()
+		var monitors []map[string]int
+		for i := 0; i < numDisplays; i++ {
+			bounds := screenshot.GetDisplayBounds(i)
+			monitors = append(monitors, map[string]int{
+				"width":  bounds.Dx(),
+				"height": bounds.Dy(),
+			})
+		}
+		return monitors
 	})
 
 	w.Run()
@@ -292,4 +306,16 @@ func showLoginView() string {
 	w.Run()
 
 	return apiKey
+}
+
+func randomString(length int) string {
+	const charset = "abcdefghijklmnopqrstuvwxyz0123456789"
+	seed := rand.NewSource(time.Now().UnixNano())
+	r := rand.New(seed)
+
+	b := make([]byte, length)
+	for i := range b {
+		b[i] = charset[r.Intn(len(charset))]
+	}
+	return string(b)
 }

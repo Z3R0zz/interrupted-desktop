@@ -126,3 +126,27 @@ func GetUserData(apiKey string) types.User {
 	user := apiResponse.Data
 	return user
 }
+
+func ClearAppData() error {
+	appDataPath, err := GetAppDataPath()
+	if err != nil {
+		return err
+	}
+
+	appDataDir := filepath.Join(appDataPath, Subdirectory)
+
+	if _, err := os.Stat(appDataDir); os.IsNotExist(err) {
+		return nil
+	}
+
+	return filepath.Walk(appDataDir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if !info.IsDir() && info.Name() != "api_key" {
+			return os.Remove(path)
+		}
+		return nil
+	})
+}

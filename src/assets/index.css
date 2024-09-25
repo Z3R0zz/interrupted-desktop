@@ -154,6 +154,14 @@ button:hover {
   background-color: rgb(252, 129, 129);
 }
 
+.monitor-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  width: 100%;
+}
+
 @media (min-width: 640px) {
   .container {
     gap: 0;

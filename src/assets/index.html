@@ -37,6 +37,7 @@
               <button id="capture-screenshot">Capture screenshot</button>
             </div>
           </div>
+          <div id="monitor-list"></div>
         </div>
       </div>
       <div id="gallery-content" class="upload-container gallery">
@@ -56,24 +57,39 @@
       selectFile.addEventListener("click", () => {
         window.selectFile().then((response) => {
           alert(response);
+          updateGallery();
         });
       });
 
-      const captureButton = document.getElementById("capture-screenshot");
-      captureButton.addEventListener("click", () => {
-        monitor = prompt(
-          "Enter the monitor number to capture screenshot (Primary is usually 0)",
-          0
-        );
+      document
+        .getElementById("capture-screenshot")
+        .addEventListener("click", () => {
+          window.fetchMonitors().then((monitors) => {
+            const monitorList = document.getElementById("monitor-list");
+            monitorList.innerHTML = "";
 
-        if (monitor === null || isNaN(monitor)) {
-          alert("Invalid monitor number");
-          return;
-        }
-        window.captureScreenshot(monitor).then((response) => {
+            if (monitors.length === 0) {
+              alert("No monitors found!");
+              return;
+            }
+
+            monitors.forEach((monitor, index) => {
+              const monitorDiv = document.createElement("div");
+              monitorDiv.innerHTML = `
+        <p>Monitor ${index}: ${monitor.width}x${monitor.height}</p>
+        <button onclick="screenshot(${index})">Capture Screenshot</button>
+      `;
+              monitorList.appendChild(monitorDiv);
+            });
+          });
+        });
+
+      function screenshot(monitorIndex) {
+        window.captureScreenshot(monitorIndex).then((response) => {
           alert(response);
+          updateGallery();
         });
-      });
+      }
 
       document.addEventListener("DOMContentLoaded", (event) => {
         window.fetchGallery().then((response) => {
@@ -98,6 +114,29 @@
           }
         });
       });
+
+      function updateGallery() {
+        window.fetchGallery().then((response) => {
+          const imagesContainer = document.querySelector(".images");
+          imagesContainer.innerHTML = "";
+
+          response.forEach((image) => {
+            const img = document.createElement("img");
+            img.src = image.url;
+
+            img.setAttribute("data-url", image.url);
+
+            img.addEventListener("click", (event) => {
+              const clickedImageUrl = event.target.getAttribute("data-url");
+              window.copyToClipboard(clickedImageUrl).then((response) => {
+                alert(response);
+              });
+            });
+
+            imagesContainer.appendChild(img);
+          });
+        });
+      }
     </script>
   </body>
 </html>

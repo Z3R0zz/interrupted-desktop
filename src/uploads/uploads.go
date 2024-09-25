@@ -11,7 +11,7 @@ import (
 	"os"
 )
 
-func UploadFile(filePath string, token string) string {
+func UploadFile(filePath string, filename string, token string) string {
 	var b bytes.Buffer
 	writer := multipart.NewWriter(&b)
 
@@ -22,7 +22,7 @@ func UploadFile(filePath string, token string) string {
 	}
 	defer file.Close()
 
-	part, err := writer.CreateFormFile("file", file.Name())
+	part, err := writer.CreateFormFile("file", filename)
 	if err != nil {
 		fmt.Println("Error creating form file:", err)
 		return ""
@@ -65,7 +65,6 @@ func UploadFile(filePath string, token string) string {
 	}
 
 	var fileResponse types.FileResponse
-
 	err = json.Unmarshal(responseBody, &fileResponse)
 	if err != nil {
 		fmt.Printf("error unmarshalling response body: %s\n", err)
