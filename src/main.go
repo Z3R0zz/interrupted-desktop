@@ -82,21 +82,31 @@ func showDefaultView(apiKey string) {
 	})
 
 	w.Bind("fetchGallery", func() interface{} {
-		requestURL := fmt.Sprintf("http://127.0.0.1:8000/api/gallery/%v", apiKey)
-		res, err := http.Get(requestURL)
+
+		requestURL := fmt.Sprintf("https://api.intrd.me/api/gallery/%v", apiKey)
+		req, err := http.NewRequest("GET", requestURL, nil)
 		if err != nil {
 			fmt.Printf("error making http request: %s\n", err)
-			return "Error making http request"
+			os.Exit(1)
 		}
 
-		defer res.Body.Close()
-		body, err := io.ReadAll(res.Body)
+		req.Header.Set("User-Agent", "Mozilla/5.0 (compatible; interrupted/1.0; +https://interrupted.me)")
+
+		client := &http.Client{}
+		resp, err := client.Do(req)
 		if err != nil {
 			fmt.Printf("error reading response body: %s\n", err)
-			return "Error reading response body"
+			os.Exit(1)
+		}
+		defer resp.Body.Close()
+
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			fmt.Printf("error reading response body: %s\n", err)
+			os.Exit(1)
 		}
 
-		if res.StatusCode != 200 {
+		if resp.StatusCode != 200 {
 			fmt.Printf("API error: %s\n", string(body))
 			return "API error"
 		}
@@ -229,17 +239,27 @@ func showLoginView() string {
 			"password": {password},
 		}
 
-		res, err := http.PostForm("http://127.0.0.1:8000/api/login", formData)
+		req, err := http.NewRequest("POST", "https://api.intrd.me/api/login", strings.NewReader(formData.Encode()))
 		if err != nil {
 			fmt.Printf("error making http request: %s\n", err)
 			return "Error making http request"
 		}
 
-		defer res.Body.Close()
-		body, err := io.ReadAll(res.Body)
+		req.Header.Set("User-Agent", "Mozilla/5.0 (compatible; interrupted/1.0; +https://interrupted.me)")
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
+		client := &http.Client{}
+		resp, err := client.Do(req)
 		if err != nil {
 			fmt.Printf("error reading response body: %s\n", err)
 			return "Error reading response body"
+		}
+		defer resp.Body.Close()
+
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			fmt.Printf("error reading response body: %s\n", err)
+			os.Exit(1)
 		}
 
 		var loginResponse types.LoginResponse
@@ -249,7 +269,7 @@ func showLoginView() string {
 			return "Error unmarshalling response body"
 		}
 
-		if res.StatusCode != 200 {
+		if resp.StatusCode != 200 {
 			if loginResponse.Message != nil {
 				fmt.Printf("API error: %s\n", *loginResponse.Message)
 				return *loginResponse.Message

@@ -82,15 +82,24 @@ func DeleteApiKey() error {
 }
 
 func GetUserData(apiKey string) types.User {
-	requestURL := fmt.Sprintf("http://127.0.0.1:8000/api/whois/%v", apiKey)
-	res, err := http.Get(requestURL)
+	requestURL := fmt.Sprintf("https://api.intrd.me/api/whois/%v", apiKey)
+	req, err := http.NewRequest("GET", requestURL, nil)
 	if err != nil {
 		fmt.Printf("error making http request: %s\n", err)
 		os.Exit(1)
 	}
 
-	defer res.Body.Close()
-	body, err := io.ReadAll(res.Body)
+	req.Header.Set("User-Agent", "Mozilla/5.0 (compatible; interrupted/1.0; +https://interrupted.me)")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Printf("error reading response body: %s\n", err)
+		os.Exit(1)
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Printf("error reading response body: %s\n", err)
 		os.Exit(1)
@@ -104,7 +113,7 @@ func GetUserData(apiKey string) types.User {
 		os.Exit(1)
 	}
 
-	if res.StatusCode != 200 {
+	if resp.StatusCode != 200 {
 		if apiResponse.Message != nil {
 			fmt.Printf("API error: %s\n", *apiResponse.Message)
 		} else {
