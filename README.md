@@ -11,7 +11,7 @@ Go 1.22.5 or newer
 
 1. Run to build the project
 ```
-go build
+go build src/main.go
 ```
 
 OR
