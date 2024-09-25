@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+	"runtime"
 )
 
 const (
@@ -21,7 +22,17 @@ func GetAppDataPath() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return filepath.Join(user.HomeDir, "AppData", "Roaming"), nil
+
+	switch runtime.GOOS {
+	case "windows":
+		return filepath.Join(user.HomeDir, "AppData", "Roaming"), nil
+	case "darwin":
+		return filepath.Join(user.HomeDir, "Library", "Application Support"), nil
+	case "linux":
+		return filepath.Join(user.HomeDir, ".config"), nil
+	default:
+		return "", os.ErrNotExist
+	}
 }
 
 func SaveApiKey(apiKey string) error {
