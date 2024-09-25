@@ -37,7 +37,7 @@ jobs:
         shell: bash
 
       - name: Upload release assets
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: interrupted-${{ matrix.os }}
           path: |
