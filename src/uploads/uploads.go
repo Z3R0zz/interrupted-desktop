@@ -4,11 +4,17 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"image/png"
+	"interrupted-desktop/src/data"
 	"interrupted-desktop/src/types"
 	"io"
 	"mime/multipart"
 	"net/http"
 	"os"
+	"path/filepath"
+
+	"github.com/kbinani/screenshot"
+	"golang.design/x/clipboard"
 )
 
 func UploadFile(filePath string, filename string, token string) string {
@@ -77,4 +83,46 @@ func UploadFile(filePath string, filename string, token string) string {
 		fmt.Println("Upload failed")
 		return ""
 	}
+}
+
+func CaptureAndSaveScreenshot(displayIndex int, fileName string) (string, error) {
+	numDisplays := screenshot.NumActiveDisplays()
+	if displayIndex >= numDisplays || displayIndex < 0 {
+		return "", fmt.Errorf("invalid display index")
+	}
+
+	bounds := screenshot.GetDisplayBounds(displayIndex)
+	img, err := screenshot.CaptureRect(bounds)
+	if err != nil {
+		return "", fmt.Errorf("error capturing screenshot: %v", err)
+	}
+
+	appDataPath, err := data.GetAppDataPath()
+	if err != nil {
+		return "", fmt.Errorf("error getting app data path: %v", err)
+	}
+
+	savePath := filepath.Join(appDataPath, data.Subdirectory, fileName)
+	os.MkdirAll(filepath.Dir(savePath), os.ModePerm)
+
+	file, err := os.Create(savePath)
+	if err != nil {
+		return "", fmt.Errorf("error creating screenshot file: %v", err)
+	}
+	defer file.Close()
+
+	if err := png.Encode(file, img); err != nil {
+		return "", fmt.Errorf("error encoding screenshot to PNG: %v", err)
+	}
+
+	return savePath, nil
+}
+
+func UploadAndCopyToClipboard(filePath, fileName, apiKey string) (string, error) {
+	url := UploadFile(filePath, fileName, apiKey)
+	if url == "" {
+		return "", fmt.Errorf("error uploading file")
+	}
+	clipboard.Write(clipboard.FmtText, []byte(url))
+	return fmt.Sprintf("File '%s' uploaded and URL copied to clipboard!", fileName), nil
 }

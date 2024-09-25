@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"interrupted-desktop/src/types"
+	"interrupted-desktop/src/utils"
 	"io"
-	"net/http"
 	"os"
 	"os/user"
 	"path/filepath"
@@ -82,19 +82,15 @@ func DeleteApiKey() error {
 }
 
 func GetUserData(apiKey string) types.User {
-	requestURL := fmt.Sprintf("https://api.intrd.me/api/whois/%v", apiKey)
-	req, err := http.NewRequest("GET", requestURL, nil)
-	if err != nil {
-		fmt.Printf("error making http request: %s\n", err)
-		os.Exit(1)
+	headers := map[string]string{
+		"User-Agent": "Mozilla/5.0 (compatible; interrupted/1.0; +https://interrupted.me)",
 	}
 
-	req.Header.Set("User-Agent", "Mozilla/5.0 (compatible; interrupted/1.0; +https://interrupted.me)")
+	requestURL := fmt.Sprintf("https://api.intrd.me/api/whois/%v", apiKey)
 
-	client := &http.Client{}
-	resp, err := client.Do(req)
+	resp, err := utils.SendAPIRequest("GET", requestURL, nil, headers)
 	if err != nil {
-		fmt.Printf("error reading response body: %s\n", err)
+		fmt.Printf("error performing request: %s\n", err)
 		os.Exit(1)
 	}
 	defer resp.Body.Close()
