@@ -207,3 +207,46 @@ button:hover {
     gap: 0;
   }
 }
+
+.gradient-top-left,
+.gradient-top-right,
+.gradient-bottom-left {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .gradient-top-left,
+  .gradient-top-right,
+  .gradient-bottom-left {
+    display: flex;
+    position: absolute;
+    border-radius: 1.5rem;
+    z-index: -1;
+  }
+
+  .gradient-top-left {
+    top: 0;
+    left: 0;
+    width: 9rem;
+    height: 9rem;
+    filter: blur(140px);
+    background: linear-gradient(to right, rgb(220, 38, 38), rgb(185, 28, 28));
+  }
+  .gradient-top-right {
+    top: 24rem;
+    right: 0;
+    width: 12rem;
+    height: 12rem;
+    filter: blur(180px);
+    background: linear-gradient(to right, rgb(244, 63, 94), rgb(190, 24, 93));
+  }
+
+  .gradient-bottom-left {
+    bottom: 0;
+    left: 8rem;
+    width: 12rem;
+    height: 12rem;
+    filter: blur(180px);
+    background: linear-gradient(to right, rgb(153, 27, 27), rgb(131, 24, 67));
+  }
+}
