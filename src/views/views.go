@@ -146,6 +146,53 @@ func ShowDefaultView(apiKey string) {
 		return msg
 	})
 
+	w.Bind("pasteText", func(pasteTitle string, pasteText string) string {
+		formData := url.Values{
+			"token":   {apiKey},
+			"title":   {pasteTitle},
+			"content": {pasteText},
+		}
+
+		headers := map[string]string{
+			"User-Agent":   "Mozilla/5.0 (compatible; interrupted/1.0; +https://interrupted.me)",
+			"Content-Type": "application/x-www-form-urlencoded",
+		}
+
+		resp, err := utils.SendAPIRequest("POST", "https://api.intrd.me/api/paste", strings.NewReader(formData.Encode()), headers)
+		if err != nil {
+			fmt.Printf("error performing request: %s\n", err)
+			return "Error performing request"
+		}
+		defer resp.Body.Close()
+
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			fmt.Printf("error reading response body: %s\n", err)
+			return "Error reading response body"
+		}
+
+		var pasteResponse types.PasteResponse
+		err = json.Unmarshal(body, &pasteResponse)
+		if err != nil {
+			fmt.Printf("error unmarshalling response body: %s\n", err)
+			return "Error unmarshalling response body"
+		}
+
+		if resp.StatusCode != http.StatusOK {
+			if pasteResponse.Message != nil {
+				fmt.Printf("API error: %s\n", *pasteResponse.Message)
+				return *pasteResponse.Message
+			} else {
+				fmt.Printf("API error: unknown error\n")
+				return "Unknown error"
+			}
+		}
+
+		url := pasteResponse.Data.Url
+		clipboard.Write(clipboard.FmtText, []byte(url))
+		return fmt.Sprintf("Paste '%s' uploaded and URL copied to clipboard!", pasteTitle)
+	})
+
 	w.Bind("fetchMonitors", func() interface{} {
 		numDisplays := screenshot.NumActiveDisplays()
 		var monitors []map[string]int

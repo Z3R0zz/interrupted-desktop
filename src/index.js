@@ -135,3 +135,27 @@ function updateGallery() {
     });
   });
 }
+
+const paste = document.getElementById("submit-paste");
+paste.addEventListener("click", () => {
+  const pasteTitleElement = document.getElementById("paste-title");
+  const pasteContentElement = document.getElementById("paste-content");
+  
+  const pasteTitle = pasteTitleElement.value;
+  const pasteText = pasteContentElement.value;
+  
+  window.pasteText(pasteTitle, pasteText).then((response) => {
+    pasteTitleElement.value = "";
+    pasteContentElement.value = "";
+    Toastify({
+        text: response,
+        duration: 5000,
+        gravity: "top",
+        position: "right",
+        stopOnFocus: true,
+        style: {
+          background: "linear-gradient(to right, #d90f0f, #860909)",
+        },
+    }).showToast();
+  });
+});

@@ -12,6 +12,16 @@ type StatsResponse struct {
 	Data    Stats   `json:"data"`
 }
 
+type PasteResponse struct {
+	Status  string  `json:"status"`
+	Message *string `json:"message"`
+	Data    Paste   `json:"data"`
+}
+
+type Paste struct {
+	Url string `json:"url"`
+}
+
 type Stats struct {
 	Uploads  int    `json:"uploads"`
 	Pastes   int    `json:"pastes"`
