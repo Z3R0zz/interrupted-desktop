@@ -21,6 +21,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Verify Go files
+        run: |
+          echo "Listing files in the repository:"
+          ls -R # List all files to ensure the Go files are present
+
       - name: Setup Go
         uses: actions/setup-go@v4
         with:
@@ -63,16 +68,17 @@ jobs:
 
       - name: Clean previous binaries
         run: |
+          echo "Cleaning up old binaries"
           rm -f interrupted-${{ matrix.os }}
 
       - name: Build the project
-        run: go build -o interrupted-${{ matrix.os }} .
+        run: go build -o interrupted-${{ runner.os }} .
 
       - name: Upload Binaries
         uses: actions/upload-artifact@v3
         with:
           name: binaries-${{ matrix.os }}
-          path: interrupted-${{ matrix.os }}
+          path: interrupted-${{ runner.os }}
 
   release:
     needs: build
