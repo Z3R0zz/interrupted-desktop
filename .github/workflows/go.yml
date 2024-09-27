@@ -62,8 +62,9 @@ jobs:
         run: go test -v ./...
 
       - name: Clean previous binaries
+        if: matrix.os == 'windows-latest'
         run: |
-          rm -f interrupted-${{ matrix.os }}
+          Remove-Item -Path "interrupted-${{ matrix.os }}" -Force -ErrorAction SilentlyContinue
 
       - name: Build the project
         run: |
