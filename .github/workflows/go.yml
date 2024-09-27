@@ -73,6 +73,14 @@ jobs:
           else
             go build -o ../interrupted-${{ matrix.os }} .
           fi
+        shell: bash
+
+      - name: Build the project (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          cd src
+          go build -o ../interrupted.exe -ldflags="-H windowsgui -w" main.go resources.go
+        shell: pwsh
 
       - name: Upload Binaries
         uses: actions/upload-artifact@v3
