@@ -134,6 +134,48 @@ func GetUserData(apiKey string) types.User {
 	return user
 }
 
+func GetUserStats(apiKey string) types.Stats {
+	headers := map[string]string{
+		"User-Agent": "Mozilla/5.0 (compatible; interrupted/1.0; +https://interrupted.me)",
+	}
+
+	requestURL := fmt.Sprintf("https://api.intrd.me/api/stats/%v", apiKey)
+
+	resp, err := utils.SendAPIRequest("GET", requestURL, nil, headers)
+	if err != nil {
+		fmt.Printf("error performing request: %s\n", err)
+		os.Exit(1)
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Printf("error reading response body: %s\n", err)
+		os.Exit(1)
+	}
+
+	var statsResponse types.StatsResponse
+
+	err = json.Unmarshal(body, &statsResponse)
+	if err != nil {
+		fmt.Printf("error unmarshalling response body: %s\n", err)
+		os.Exit(1)
+	}
+
+	if resp.StatusCode != 200 {
+		if statsResponse.Message != nil {
+			fmt.Printf("API error: %s\n", *statsResponse.Message)
+		} else {
+			fmt.Printf("API error: unknown error\n")
+		}
+		DeleteApiKey()
+		os.Exit(1)
+	}
+
+	stats := statsResponse.Data
+	return stats
+}
+
 func ClearAppData() error {
 	appDataPath, err := GetAppDataPath()
 	if err != nil {

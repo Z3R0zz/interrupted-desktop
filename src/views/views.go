@@ -29,10 +29,17 @@ var assets embed.FS
 
 func ShowDefaultView(apiKey string) {
 	user := data.GetUserData(apiKey)
+	stats := data.GetUserStats(apiKey)
 
 	replacements := map[string]string{
 		"username": user.Username,
 		"avatar":   user.Avatar,
+		"uploads":  fmt.Sprint(stats.Uploads),
+		"pastes":   fmt.Sprint(stats.Pastes),
+		"storage":  stats.Storage,
+		"uid":      fmt.Sprint(stats.UID),
+		"joined":   stats.Joined,
+		"invitees": fmt.Sprint(stats.Invitees),
 	}
 
 	htmlWithCSS, err := loadHTMLTemplate("assets/index.html", "assets/index.css", replacements)
@@ -44,7 +51,7 @@ func ShowDefaultView(apiKey string) {
 	w := webview.New(debug)
 	defer w.Destroy()
 	w.SetTitle("Interrupted.me")
-	w.SetSize(1920, 1080, webview.HintNone)
+	w.SetSize(1080, 800, webview.HintNone)
 
 	w.Navigate("data:text/html," + htmlWithCSS)
 

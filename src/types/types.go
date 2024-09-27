@@ -6,6 +6,21 @@ type ApiResponse struct {
 	Data    User    `json:"data"`
 }
 
+type StatsResponse struct {
+	Status  string  `json:"status"`
+	Message *string `json:"message"`
+	Data    Stats   `json:"data"`
+}
+
+type Stats struct {
+	Uploads  int    `json:"uploads"`
+	Pastes   int    `json:"pastes"`
+	Storage  string `json:"storage"`
+	UID      int    `json:"uid"`
+	Joined   string `json:"joined_at"`
+	Invitees int    `json:"invitees"`
+}
+
 type User struct {
 	ID       int    `json:"id"`
 	Username string `json:"username"`

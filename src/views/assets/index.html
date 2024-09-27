@@ -22,6 +22,32 @@
         </div>
       </nav>
     </main>
+    <div class="stats-container">
+      <div class="stat">
+        <h1>Uploads</h1>
+        <p>{{uploads}}</p>
+      </div>
+      <div class="stat">
+        <h1>Pastes</h1>
+        <p>{{pastes}}</p>
+      </div>
+      <div class="stat">
+        <h1>Space Consumed</h1>
+        <p>{{storage}}</p>
+      </div>
+      <div class="stat">
+        <h1>UID</h1>
+        <p>{{uid}}</p>
+      </div>
+      <div class="stat">
+        <h1>Joined</h1>
+        <p>{{joined}}</p>
+      </div>
+      <div class="stat">
+        <h1>Users Invited</h1>
+        <p>{{invitees}}</p>
+      </div>
+    </div>
     <main class="main-content">
       <div id="dashboard-content" class="upload-container dashboard">
         <div class="upload-contents">
@@ -39,8 +65,9 @@
           </div>
           <div id="monitor-list"></div>
         </div>
+        <div class="config-container"></div>
       </div>
-      <div id="gallery-content" class="upload-container gallery">
+      <div id="gallery-content" class="upload-container">
         <div class="gallery-contents">
           <h1>gallery</h1>
           <div class="images"></div>
