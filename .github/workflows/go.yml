@@ -25,31 +25,36 @@ jobs:
     - name: Install dependencies for macOS
       if: matrix.os == 'macos-latest'
       run: |
-        brew install gtk+3 webkit2gtk
+        brew install gtk+3 webkitgtk
 
     - name: Install dependencies for Linux
       if: matrix.os == 'ubuntu-latest'
       run: |
         sudo apt-get update
-        sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev
+        sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev pkg-config
 
     - name: Build for ${{ matrix.os }}
       run: |
         if [ "${{ matrix.os }}" == "windows-latest" ]; then
-          GOOS=windows GOARCH=amd64 go build -o interrupted.exe -ldflags="-H windowsgui -w" ./src/main.go
+          GOOS=windows GOARCH=amd64 CGO_ENABLED=1 go build -o ./dist/windows/interrupted.exe -ldflags="-H windowsgui -w" ./src/main.go
         elif [ "${{ matrix.os }}" == "macos-latest" ]; then
-          go build -o interrupted ./src/main.go
+          GOOS=darwin GOARCH=amd64 CGO_ENABLED=0 go build -o ./dist/macos/interrupted ./src/main.go
         else
-          go build -o interrupted ./src/main.go
+          GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o ./dist/linux/interrupted ./src/main.go
         fi
+
+    - name: Set PKG_CONFIG_PATH
+      run: |
+        export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:/usr/lib/pkgconfig"
 
     - name: Upload release assets
       uses: actions/upload-artifact@v4
       with:
         name: interrupted-${{ matrix.os }}
         path: |
-          interrupted.exe
-          interrupted
+          ./dist/windows/interrupted.exe
+          ./dist/macos/interrupted
+          ./dist/linux/interrupted
 
   test:
     runs-on: ubuntu-latest
