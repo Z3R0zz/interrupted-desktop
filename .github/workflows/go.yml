@@ -57,14 +57,15 @@ jobs:
       - name: Install Go dependencies
         run: go mod download
 
-      - name: Clean previous binaries
+      - name: Clean previous binaries (Windows)
+        if: matrix.os == 'windows-latest'
         run: |
-          if [ "${{ matrix.os }}" == "windows-latest" ]; then
-            pwsh -Command "Remove-Item -Path 'interrupted.exe' -Force -ErrorAction SilentlyContinue"
-          else
-            rm -f interrupted-${{ matrix.os }}
-          fi
-        shell: bash
+          pwsh -Command "Remove-Item -Path 'interrupted.exe' -Force -ErrorAction SilentlyContinue"
+      
+      - name: Clean previous binaries (Linux/macOS)
+        if: matrix.os != 'windows-latest'
+        run: |
+          rm -f interrupted-${{ matrix.os }}
 
       - name: Build the project
         run: |
