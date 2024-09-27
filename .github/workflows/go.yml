@@ -77,10 +77,6 @@ jobs:
           fi
         shell: bash
 
-      - name: List Files After Build
-        run: |
-          ls -la ../
-
       - name: Upload Binaries
         uses: actions/upload-artifact@v3
         with:
