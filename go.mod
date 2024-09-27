@@ -1,8 +1,6 @@
 module interrupted-desktop
 
-go 1.22.0
-
-toolchain go1.22.5
+go 1.22
 
 require (
 	github.com/kbinani/screenshot v0.0.0-20240820160931-a8a2c5d0e191
@@ -17,7 +15,6 @@ require (
 	github.com/godbus/dbus/v5 v5.1.0 // indirect
 	github.com/jezek/xgb v1.1.1 // indirect
 	github.com/lxn/win v0.0.0-20210218163916-a377121e959e // indirect
-	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0 // indirect
 	golang.org/x/exp/shiny v0.0.0-20240909161429-701f63a606c0 // indirect
 	golang.org/x/image v0.20.0 // indirect
 	golang.org/x/mobile v0.0.0-20240909163608-642950227fb3 // indirect
