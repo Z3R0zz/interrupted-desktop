@@ -61,14 +61,18 @@ jobs:
       - name: Run tests
         run: go test -v ./...
 
+      - name: Clean previous binaries
+        run: |
+          rm -f interrupted-${{ matrix.os }}
+
       - name: Build the project
-        run: go build -o myapp-${{ matrix.os }} .
+        run: go build -o interrupted-${{ matrix.os }} .
 
       - name: Upload Binaries
         uses: actions/upload-artifact@v3
         with:
           name: binaries-${{ matrix.os }}
-          path: myapp-${{ matrix.os }}
+          path: interrupted-${{ matrix.os }}
 
   release:
     needs: build
@@ -102,8 +106,8 @@ jobs:
         with:
           tag: ${{ github.event.release.tag_name }}
           files: |
-            ./binaries/ubuntu-latest/myapp-ubuntu-latest
-            ./binaries/macos-latest/myapp-macos-latest
-            ./binaries/windows-latest/myapp-windows-latest
+            ./binaries/ubuntu-latest/interrupted-ubuntu-latest
+            ./binaries/macos-latest/interrupted-macos-latest
+            ./binaries/windows-latest/interrupted-windows-latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
