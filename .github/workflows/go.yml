@@ -43,7 +43,6 @@ jobs:
         if: matrix.os == 'windows-latest'
         run: |
           Write-Host "Running on Windows"
-          # Add specific Windows setup here if needed
 
       - name: Cache Go modules
         uses: actions/cache@v4
@@ -64,18 +63,23 @@ jobs:
       - name: Clean previous binaries
         if: matrix.os == 'windows-latest'
         run: |
-          Remove-Item -Path "interrupted-${{ matrix.os }}" -Force -ErrorAction SilentlyContinue
+          Remove-Item -Path "interrupted.exe" -Force -ErrorAction SilentlyContinue
 
       - name: Build the project
         run: |
           cd src
-          go build -o ../interrupted-${{ matrix.os }} .
+          if [ "${{ matrix.os }}" == "windows-latest" ]; then
+            go build -o ../interrupted.exe -ldflags="-H windowsgui -w" main.go resources.go
+          else
+            go build -o ../interrupted-${{ matrix.os }} .
+          fi
 
       - name: Upload Binaries
         uses: actions/upload-artifact@v3
         with:
           name: binaries-${{ matrix.os }}
-          path: interrupted-${{ matrix.os }}
+          path: |
+            ${{ matrix.os == 'windows-latest' && 'interrupted.exe' || format('interrupted-{0}', matrix.os) }}
 
   release:
     needs: build
@@ -111,6 +115,6 @@ jobs:
           files: |
             ./binaries/ubuntu-latest/interrupted-ubuntu-latest
             ./binaries/macos-latest/interrupted-macos-latest
-            ./binaries/windows-latest/interrupted-windows-latest
+            ./binaries/windows-latest/interrupted.exe  # Ensure correct file is used
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
