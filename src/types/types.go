@@ -49,6 +49,15 @@ type File struct {
 	DeleteURL string `json:"delete_url"`
 }
 
+type ShortenResponse struct {
+	Success bool  `json:"success"`
+	Url     []Url `json:"data"`
+}
+
+type Url struct {
+	ShortUrl string `json:"url"`
+}
+
 type LoginResponse struct {
 	Status  string  `json:"status"`
 	Message *string `json:"message"`

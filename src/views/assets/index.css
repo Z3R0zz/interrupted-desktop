@@ -144,6 +144,15 @@ nav {
   gap: 0.75rem;
   margin: 0.75rem 20px 20px 20px;
 }
+
+.side-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  height: 100%;
+}
+
 .upload-container {
   display: flex;
   flex-direction: column;
@@ -176,6 +185,38 @@ nav {
   min-height: 100%;
   margin-right: 40px;
   flex-grow: 1;
+}
+
+.url-shortener {
+  background-color: rgb(24, 24, 27);
+  border: 2px solid rgb(39, 39, 42);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  min-height: 100%;
+  margin-right: 40px;
+  flex-grow: 1;
+}
+
+.shorten {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  width: 100%;
+  padding: 0.5rem;
+}
+
+.shorten-url-container {
+  display: flex;
+  width: 100%;
+}
+
+.shorten p {
+  margin-bottom: 5px;
 }
 
 .paste-container {
@@ -224,7 +265,7 @@ nav {
   margin-bottom: 5px;
 }
 
-.paste-title {
+input {
   padding: .5rem;
   appearance: none;
   border-radius: 0.3rem;
@@ -232,10 +273,10 @@ nav {
   background-color: rgb(24, 24, 27);
   color: white;
   --tw-shadow: 0 0 #0000;
-  flex-grow: 1;
+  width: 100%;
 }
 
-.paste-title:focus {
+input:focus {
   outline: none;
   border: 1px solid rgb(255, 0, 0);
 }

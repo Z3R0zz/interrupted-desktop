@@ -159,3 +159,24 @@ paste.addEventListener("click", () => {
     }).showToast();
   });
 });
+
+const shorten = document.getElementById("shorten");
+shorten.addEventListener("click", () => {
+  const url = document.getElementById("shorten-url");
+
+  const urlValue = url.value;
+
+  window.shortenUrl(urlValue).then((response) => {
+    url.value = "";
+    Toastify({
+        text: response,
+        duration: 5000,
+        gravity: "top",
+        position: "right",
+        stopOnFocus: true,
+        style: {
+          background: "linear-gradient(to right, #d90f0f, #860909)",
+        },
+    }).showToast();
+  });
+});

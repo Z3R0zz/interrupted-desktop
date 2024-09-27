@@ -193,6 +193,52 @@ func ShowDefaultView(apiKey string) {
 		return fmt.Sprintf("Paste '%s' uploaded and URL copied to clipboard!", pasteTitle)
 	})
 
+	w.Bind("shortenUrl", func(destinationUrl string) string {
+		formData := url.Values{
+			"url": {destinationUrl},
+		}
+
+		headers := map[string]string{
+			"User-Agent":    "ShareX/16.1.0",
+			"Content-Type":  "application/x-www-form-urlencoded",
+			"Authorization": "Bearer " + apiKey,
+		}
+
+		resp, err := utils.SendAPIRequest("POST", "https://api.interrupted.me/shorten", strings.NewReader(formData.Encode()), headers)
+		if err != nil {
+			fmt.Printf("error performing request: %s\n", err)
+			return "Error performing request"
+		}
+		defer resp.Body.Close()
+
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			fmt.Printf("error reading response body: %s\n", err)
+			return "Error reading response body"
+		}
+
+		var shortenResponse types.ShortenResponse
+		err = json.Unmarshal(body, &shortenResponse)
+		if err != nil {
+			fmt.Printf("error unmarshalling response body: %s\n", err)
+			return "Error unmarshalling response body"
+		}
+
+		if resp.StatusCode != http.StatusOK {
+			if !shortenResponse.Success {
+				fmt.Printf("API error: %v\n", shortenResponse)
+				return "Unknown error"
+			} else {
+				fmt.Printf("API error: unknown error\n")
+				return "Unknown error"
+			}
+		}
+
+		url := shortenResponse.Url[0].ShortUrl
+		clipboard.Write(clipboard.FmtText, []byte(url))
+		return "Url uploaded and copied to clipboard!"
+	})
+
 	w.Bind("fetchMonitors", func() interface{} {
 		numDisplays := screenshot.NumActiveDisplays()
 		var monitors []map[string]int
