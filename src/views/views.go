@@ -2,6 +2,7 @@ package views
 
 import (
 	"embed"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"image/png"
@@ -42,7 +43,10 @@ func ShowDefaultView(apiKey string) {
 		"invitees": fmt.Sprint(stats.Invitees),
 	}
 
-	htmlWithCSS, err := loadHTMLTemplate("assets/index.html", "assets/index.css", replacements)
+	cssAssets := []string{"assets/index.css"}
+	jsAssets := []string{"assets/dist/bundle.js"}
+
+	pageContent, err := loadHTMLTemplate("assets/index.html", cssAssets, jsAssets, replacements)
 	if err != nil {
 		log.Fatalf("Failed to load template: %v", err)
 	}
@@ -53,7 +57,8 @@ func ShowDefaultView(apiKey string) {
 	w.SetTitle("Interrupted.me")
 	w.SetSize(1080, 800, webview.HintNone)
 
-	w.Navigate("data:text/html," + htmlWithCSS)
+	encodedContent := base64.StdEncoding.EncodeToString([]byte(pageContent))
+	w.Navigate("data:text/html;base64," + encodedContent)
 
 	w.Bind("logOut", func() {
 		data.DeleteApiKey()
@@ -158,7 +163,10 @@ func ShowDefaultView(apiKey string) {
 }
 
 func ShowLoginView() string {
-	htmlWithCSS, err := loadHTMLTemplate("assets/auth/login.html", "assets/auth/login.css", nil)
+	cssAssets := []string{"assets/auth/login.css"}
+	jsAssets := []string{"assets/dist/bundle.js"}
+
+	pageContent, err := loadHTMLTemplate("assets/auth/login.html", cssAssets, jsAssets, nil)
 	if err != nil {
 		log.Fatalf("Failed to load template: %v", err)
 	}
@@ -171,7 +179,8 @@ func ShowLoginView() string {
 
 	var apiKey string
 
-	w.Navigate("data:text/html," + htmlWithCSS)
+	encodedContent := base64.StdEncoding.EncodeToString([]byte(pageContent))
+	w.Navigate("data:text/html;base64," + encodedContent)
 
 	w.Bind("logOut", func() {
 		w.Terminate()
@@ -233,15 +242,28 @@ func ShowLoginView() string {
 	return apiKey
 }
 
-func loadHTMLTemplate(templatePath string, cssPath string, replacements map[string]string) (string, error) {
+func loadHTMLTemplate(templatePath string, cssPaths []string, jsPaths []string, replacements map[string]string) (string, error) {
 	htmlContent, err := assets.ReadFile(templatePath)
 	if err != nil {
 		return "", fmt.Errorf("failed to read HTML file: %s", err)
 	}
 
-	cssContent, err := assets.ReadFile(cssPath)
-	if err != nil {
-		return "", fmt.Errorf("failed to read CSS file: %s", err)
+	var cssContent string
+	for _, cssPath := range cssPaths {
+		cssData, err := assets.ReadFile(cssPath)
+		if err != nil {
+			return "", fmt.Errorf("failed to read CSS file %s: %s", cssPath, err)
+		}
+		cssContent += string(cssData) + "\n"
+	}
+
+	var jsContent string
+	for _, jsPath := range jsPaths {
+		jsData, err := assets.ReadFile(jsPath)
+		if err != nil {
+			return "", fmt.Errorf("failed to read JS file %s: %s", jsPath, err)
+		}
+		jsContent += string(jsData) + "\n"
 	}
 
 	htmlWithReplacements := string(htmlContent)
@@ -249,7 +271,13 @@ func loadHTMLTemplate(templatePath string, cssPath string, replacements map[stri
 		htmlWithReplacements = strings.ReplaceAll(htmlWithReplacements, "{{"+placeholder+"}}", value)
 	}
 
-	htmlWithCSS := htmlWithReplacements + "<style>" + string(cssContent) + " /* cache-buster: " + fmt.Sprint(time.Now().UnixNano()) + " */" + "</style>"
+	htmlWithCSSAndJS := fmt.Sprintf(
+		"%s<style>%s /* cache-buster: %d */</style><script>%s</script>",
+		htmlWithReplacements,
+		cssContent,
+		time.Now().UnixNano(),
+		jsContent,
+	)
 
-	return htmlWithCSS, nil
+	return htmlWithCSSAndJS, nil
 }
