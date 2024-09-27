@@ -60,7 +60,7 @@ jobs:
       - name: Clean previous binaries
         run: |
           if [ "${{ matrix.os }}" == "windows-latest" ]; then
-            Remove-Item -Path "interrupted.exe" -Force -ErrorAction SilentlyContinue
+            pwsh -Command "Remove-Item -Path 'interrupted.exe' -Force -ErrorAction SilentlyContinue"
           else
             rm -f interrupted-${{ matrix.os }}
           fi
