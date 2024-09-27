@@ -55,21 +55,21 @@ document
     });
   });
 
-function screenshot(monitorIndex) {
-  window.captureScreenshot(monitorIndex).then((response) => {
-    Toastify({
-        text: response,
-        duration: 5000,
-        gravity: "top",
-        position: "right",
-        stopOnFocus: true,
-        style: {
-          background: "linear-gradient(to right, #d90f0f, #860909)",
-        },
-    }).showToast();
-    updateGallery();
-  });
-}
+  window.screenshot = function(monitorIndex) {
+    window.captureScreenshot(monitorIndex).then((response) => {
+      Toastify({
+          text: response,
+          duration: 5000,
+          gravity: "top",
+          position: "right",
+          stopOnFocus: true,
+          style: {
+            background: "linear-gradient(to right, #d90f0f, #860909)",
+          },
+      }).showToast();
+      updateGallery();
+    });
+  }
 
 document.addEventListener("DOMContentLoaded", (event) => {
   window.fetchGallery().then((response) => {
