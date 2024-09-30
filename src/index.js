@@ -1,5 +1,6 @@
 import Toastify from 'toastify-js'
 import "toastify-js/src/toastify.css"
+import './views/assets/styles.scss';
 
 const logout = document.getElementById("logout");
 logout.addEventListener("click", () => {

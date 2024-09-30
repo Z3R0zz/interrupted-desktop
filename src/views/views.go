@@ -43,7 +43,7 @@ func ShowDefaultView(apiKey string) {
 		"invitees": fmt.Sprint(stats.Invitees),
 	}
 
-	cssAssets := []string{"assets/index.css"}
+	cssAssets := []string{"assets/dist/styles.css"}
 	jsAssets := []string{"assets/dist/bundle.js"}
 
 	pageContent, err := loadHTMLTemplate("assets/index.html", cssAssets, jsAssets, replacements)
@@ -256,7 +256,7 @@ func ShowDefaultView(apiKey string) {
 }
 
 func ShowLoginView() string {
-	cssAssets := []string{"assets/auth/login.css"}
+	cssAssets := []string{"assets/dist/styles.css"}
 	jsAssets := []string{"assets/dist/bundle.js"}
 
 	pageContent, err := loadHTMLTemplate("assets/auth/login.html", cssAssets, jsAssets, nil)
