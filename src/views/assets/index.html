@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <link rel="stylesheet" href="index.css" />
-  </head>
-  <body>
+  <head></head>
+  <body class="antialiased bg-black w-full">
     <div>
-      <div class="gradient-top-left"></div>
-      <div class="gradient-top-right"></div>
-      <div class="gradient-bottom-left"></div>
+      <div
+        class="hidden lg:flex absolute top-0 left-0 w-36 h-36 blur-[140px] bg-gradient-to-r from-red-600 to-red-700 rounded-3xl z-[-1]"
+      ></div>
+      <div
+        class="hidden lg:flex absolute top-96 right-0 w-48 h-48 blur-[180px] bg-gradient-to-r from-red-500 to-pink-700 rounded-3xl z-[-1]"
+      ></div>
+      <div
+        class="hidden lg:flex absolute bottom-0 left-32 w-48 h-48 blur-[180px] bg-gradient-to-r from-red-800 to-pink-900 rounded-3xl z-[-1]"
+      ></div>
     </div>
     <main class="navbar-container">
       <nav>
@@ -78,7 +82,8 @@
                 id="paste-content"
                 placeholder="// Your paste content here..."
               ></textarea>
-            </div><br>
+            </div>
+            <br />
             <div class="paste-actions">
               <button id="submit-paste">Submit</button>
             </div>
@@ -98,7 +103,8 @@
             <p>URL<span class="required">*</span></p>
             <div class="shorten-url-container">
               <input type="url" id="shorten-url" class="shorten-url" />
-            </div><br>
+            </div>
+            <br />
             <div class="shorten-actions">
               <button id="shorten">Shorten</button>
             </div>

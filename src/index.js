@@ -1,102 +1,80 @@
-import Toastify from 'toastify-js'
-import "toastify-js/src/toastify.css"
+import Toastify from 'toastify-js';
+import "toastify-js/src/toastify.css";
 import './views/assets/styles.scss';
 
-const logout = document.getElementById("logout");
-logout.addEventListener("click", () => {
+function showToast(text) {
+  Toastify({
+    text: text,
+    duration: 5000,
+    gravity: "top",
+    position: "right",
+    stopOnFocus: true,
+    style: {
+      background: "linear-gradient(to right, #d90f0f, #860909)",
+    },
+  }).showToast();
+}
+
+function attachEventListener(elementId, event, callback) {
+  const element = document.getElementById(elementId);
+  if (element) {
+    element.addEventListener(event, callback);
+  }
+}
+
+attachEventListener("logout", "click", () => {
   window.logOut();
 });
 
-const selectFile = document.getElementById("select-file");
-selectFile.addEventListener("click", () => {
+attachEventListener("select-file", "click", () => {
   window.selectFile().then((response) => {
-    Toastify({
-        text: response,
-        duration: 5000,
-        gravity: "top",
-        position: "right",
-        stopOnFocus: true,
-        style: {
-          background: "linear-gradient(to right, #d90f0f, #860909)",
-        },
-    }).showToast();
+    showToast(response);
     updateGallery();
   });
 });
 
-document
-  .getElementById("capture-screenshot")
-  .addEventListener("click", () => {
-    window.fetchMonitors().then((monitors) => {
-      const monitorList = document.getElementById("monitor-list");
-      monitorList.innerHTML = "";
+attachEventListener("capture-screenshot", "click", () => {
+  window.fetchMonitors().then((monitors) => {
+    const monitorList = document.getElementById("monitor-list");
+    monitorList.innerHTML = "";
 
-      if (monitors.length === 0) {
-        Toastify({
-            text: "No monitors found!",
-            duration: 5000,
-            gravity: "top",
-            position: "right",
-            stopOnFocus: true,
-            style: {
-              background: "linear-gradient(to right, #d90f0f, #860909)",
-            },
-        }).showToast();
-        return;
-      }
+    if (monitors.length === 0) {
+      showToast("No monitors found!");
+      return;
+    }
 
-      monitors.forEach((monitor, index) => {
-        const monitorDiv = document.createElement("div");
-        monitorDiv.innerHTML = `
-  <p>Monitor ${index}: ${monitor.width}x${monitor.height}</p>
-  <button onclick="screenshot(${index})">Capture Screenshot</button>
-`;
-        monitorList.appendChild(monitorDiv);
-      });
+    monitors.forEach((monitor, index) => {
+      const monitorDiv = document.createElement("div");
+      monitorDiv.innerHTML = `
+        <p>Monitor ${index}: ${monitor.width}x${monitor.height}</p>
+        <button onclick="screenshot(${index})">Capture Screenshot</button>
+      `;
+      monitorList.appendChild(monitorDiv);
     });
   });
+});
 
-  window.screenshot = function(monitorIndex) {
-    window.captureScreenshot(monitorIndex).then((response) => {
-      Toastify({
-          text: response,
-          duration: 5000,
-          gravity: "top",
-          position: "right",
-          stopOnFocus: true,
-          style: {
-            background: "linear-gradient(to right, #d90f0f, #860909)",
-          },
-      }).showToast();
-      updateGallery();
-    });
-  }
+window.screenshot = function(monitorIndex) {
+  window.captureScreenshot(monitorIndex).then((response) => {
+    showToast(response);
+    updateGallery();
+  });
+};
 
-document.addEventListener("DOMContentLoaded", (event) => {
+document.addEventListener("DOMContentLoaded", () => {
   window.fetchGallery().then((response) => {
     if (response.length > 0) {
       const imagesContainer = document.querySelector(".images");
+      imagesContainer.innerHTML = "";
 
       response.forEach((image) => {
         const img = document.createElement("img");
         img.src = image.url;
-
         img.setAttribute("data-url", image.url);
 
         img.addEventListener("click", (event) => {
           const clickedImageUrl = event.target.getAttribute("data-url");
-          window.copyToClipboard(clickedImageUrl).then((response) => {
-            Toastify({
-                text: response,
-                duration: 5000,
-                gravity: "top",
-                position: "right",
-                stopOnFocus: true,
-                style: {
-                  background: "linear-gradient(to right, #d90f0f, #860909)",
-                },
-            }).showToast();
-          });
+          window.copyToClipboard(clickedImageUrl).then(showToast);
         });
 
         imagesContainer.appendChild(img);
@@ -113,23 +91,11 @@ function updateGallery() {
     response.forEach((image) => {
       const img = document.createElement("img");
       img.src = image.url;
-
       img.setAttribute("data-url", image.url);
 
       img.addEventListener("click", (event) => {
         const clickedImageUrl = event.target.getAttribute("data-url");
-        window.copyToClipboard(clickedImageUrl).then((response) => {
-          Toastify({
-            text: response,
-            duration: 5000,
-            gravity: "top",
-            position: "right",
-            stopOnFocus: true,
-            style: {
-              background: "linear-gradient(to right, #d90f0f, #860909)",
-            },
-        }).showToast();
-        });
+        window.copyToClipboard(clickedImageUrl).then(showToast);
       });
 
       imagesContainer.appendChild(img);
@@ -137,47 +103,26 @@ function updateGallery() {
   });
 }
 
-const paste = document.getElementById("submit-paste");
-paste.addEventListener("click", () => {
+attachEventListener("submit-paste", "click", () => {
   const pasteTitleElement = document.getElementById("paste-title");
   const pasteContentElement = document.getElementById("paste-content");
-  
+
   const pasteTitle = pasteTitleElement.value;
   const pasteText = pasteContentElement.value;
-  
+
   window.pasteText(pasteTitle, pasteText).then((response) => {
     pasteTitleElement.value = "";
     pasteContentElement.value = "";
-    Toastify({
-        text: response,
-        duration: 5000,
-        gravity: "top",
-        position: "right",
-        stopOnFocus: true,
-        style: {
-          background: "linear-gradient(to right, #d90f0f, #860909)",
-        },
-    }).showToast();
+    showToast(response);
   });
 });
 
-const shorten = document.getElementById("shorten");
-shorten.addEventListener("click", () => {
+attachEventListener("shorten", "click", () => {
   const url = document.getElementById("shorten-url");
-
   const urlValue = url.value;
 
   window.shortenUrl(urlValue).then((response) => {
     url.value = "";
-    Toastify({
-        text: response,
-        duration: 5000,
-        gravity: "top",
-        position: "right",
-        stopOnFocus: true,
-        style: {
-          background: "linear-gradient(to right, #d90f0f, #860909)",
-        },
-    }).showToast();
+    showToast(response);
   });
 });

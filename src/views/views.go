@@ -54,25 +54,10 @@ func ShowDefaultView(apiKey string) {
 	debug := true
 	w := webview.New(debug)
 	defer w.Destroy()
-	w.SetTitle("Interrupted.me")
-	w.SetSize(1080, 800, webview.HintNone)
-
-	encodedContent := base64.StdEncoding.EncodeToString([]byte(pageContent))
-	w.Navigate("data:text/html;base64," + encodedContent)
 
 	w.Bind("logOut", func() {
 		data.DeleteApiKey()
 		w.Terminate()
-	})
-
-	w.Bind("fetchGallery", func() interface{} {
-		galleryData, err := utils.FetchGallery(apiKey)
-		if err != nil {
-			fmt.Printf("Error fetching gallery: %s\n", err)
-			return "Error fetching gallery"
-		}
-
-		return galleryData
 	})
 
 	w.Bind("selectFile", func() string {
@@ -251,6 +236,22 @@ func ShowDefaultView(apiKey string) {
 		}
 		return monitors
 	})
+
+	w.Bind("fetchGallery", func() interface{} {
+		galleryData, err := utils.FetchGallery(apiKey)
+		if err != nil {
+			fmt.Printf("Error fetching gallery: %s\n", err)
+			return "Error fetching gallery"
+		}
+
+		return galleryData
+	})
+
+	w.SetTitle("Interrupted.me")
+	w.SetSize(1080, 800, webview.HintNone)
+
+	encodedContent := base64.StdEncoding.EncodeToString([]byte(pageContent))
+	w.Navigate("data:text/html;base64," + encodedContent)
 
 	w.Run()
 }

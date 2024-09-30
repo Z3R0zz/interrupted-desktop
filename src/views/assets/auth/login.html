@@ -1,56 +1,45 @@
 <!DOCTYPE html>
 <html>
   <head></head>
-  <body class="bg-black">
+  <body class="antialiased bg-black w-full">
     <div>
-      <div class="gradient-top-left"></div>
-      <div class="gradient-top-right"></div>
-      <div class="gradient-bottom-left"></div>
+      <div
+        class="hidden lg:flex absolute top-0 left-0 w-36 h-36 blur-[140px] bg-gradient-to-r from-red-600 to-red-700 rounded-3xl z-[-1]"
+      ></div>
+      <div
+        class="hidden lg:flex absolute top-96 right-0 w-48 h-48 blur-[180px] bg-gradient-to-r from-red-500 to-pink-700 rounded-3xl z-[-1]"
+      ></div>
+      <div
+        class="hidden lg:flex absolute bottom-0 left-32 w-48 h-48 blur-[180px] bg-gradient-to-r from-red-800 to-pink-900 rounded-3xl z-[-1]"
+      ></div>
     </div>
-    <main class="navbar-container">
-      <nav>
-        <div class="flex items-center">
-          <svg
-            class="brand"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            aria-hidden="true"
-            data-slot="icon"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-            ></path>
-          </svg>
-        </div>
-        <div>
-          <h1 class="nav-text">INTERRUPTED</h1>
-        </div>
-        <div class="logout">
-          <h1 id="logout" class="nav-text">Cancel</h1>
-        </div>
-      </nav>
-    </main>
-    <div class="container">
-      <div class="form-container">
-        <form class="form" id="form">
-          <div class="image-container">
+    <div
+      class="flex flex-col w-screen h-screen items-center justify-center p-4"
+    >
+      <div
+        class="flex flex-col items-center justify-center h-full w-full max-w-[500px]"
+      >
+        <form
+          id="form"
+          class="flex flex-col gap-3 w-full bg-zinc-950 border-2 border-zinc-900 rounded-lg p-4 m-3 box-border"
+        >
+          <div class="flex justify-center items-center mt-3">
             <img
               draggable="false"
-              class="logo"
+              class="w-[250px]"
               src="https://r2.interrupted.me/zZz/appimg.png"
               alt="interrupted.me"
             />
           </div>
-          <h1 class="title">Welcome back!</h1>
-          <div class="input-group">
-            <label class="label" for="username">Username</label>
+          <h1 class="text-white text-2xl text-center font-semibold">
+            Welcome back!
+          </h1>
+          <div class="flex flex-col text-gray-300 text-base px-3">
+            <label class="text-sm font-medium mb-2" for="username"
+              >Username</label
+            >
             <input
-              class="input"
+              class="bg-zinc-800 p-2 rounded-md border border-[#6b7280]/60 hover:border-[#6b7280] focus:ring-[#6b7280] focus:border-[#6b7280] hover:ring-[#6b7280] active:ring-[#6b7280] active:border-[#6b7280]"
               type="text"
               id="username"
               name="username"
@@ -59,10 +48,12 @@
               required
             />
           </div>
-          <div class="input-group">
-            <label class="label" for="password">Password</label>
+          <div class="flex flex-col text-gray-300 text-base px-3">
+            <label class="text-sm font-medium mb-2" for="password"
+              >Password</label
+            >
             <input
-              class="input"
+              class="bg-zinc-800 p-2 rounded-md border border-[#6b7280]/60 hover:border-[#6b7280] focus:ring-[#6b7280] focus:border-[#6b7280] hover:ring-[#6b7280] active:ring-[#6b7280] active:border-[#6b7280]"
               type="password"
               id="password"
               name="password"
@@ -71,19 +62,18 @@
               required
             />
           </div>
-          <div class="button-container">
-            <button type="submit" class="button">Login</button>
+          <div class="px-3">
+            <button
+              type="submit"
+              class="bg-red-500 hover:bg-red-400 text-white font-semibold py-2 px-4 rounded-md ring-2 ring-red-400 w-full"
+            >
+              Login
+            </button>
           </div>
         </form>
       </div>
     </div>
-
     <script>
-      const logout = document.getElementById("logout");
-      logout.addEventListener("click", () => {
-        window.logOut();
-      });
-
       const form = document.getElementById("form");
       form.addEventListener("submit", (event) => {
         event.preventDefault();
