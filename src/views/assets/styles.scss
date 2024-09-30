@@ -1,9 +1,77 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-.fade-in { animation: fadeIn 1s; }
-@keyframes fadeIn {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap");
+
+$scrollbar-width: 8px;
+$bg-color: #0c0d0d;
+$thumb-color: #0d1117;
+$selection-bg: #ff5e693d;
+$font-family: "Plus Jakarta Sans", sans-serif;
+$nav-active-bg: rgba(153, 27, 27, 0.2);
+$radial-start: red;
+$radial-end: transparent;
+
+html {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+::-moz-selection {
+  background: $selection-bg;
+}
+
+::selection {
+  background: $selection-bg;
+}
+
+::-webkit-scrollbar {
+  width: $scrollbar-width;
+  background-color: $bg-color;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: $thumb-color;
+  border-radius: 4px;
+}
+
+.plus-jakarta-sans {
+  font-family: $font-family;
+  font-style: normal;
+}
+
+.nav-active {
+  background-color: $nav-active-bg;
+}
+
+.bg-gradient-radial {
+  background: radial-gradient(circle at bottom right, $radial-start 0%, $radial-end 55%);
+}
+
+.images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+
+  img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 0.5rem;
+  }
+}
+
+.monitor-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
 }

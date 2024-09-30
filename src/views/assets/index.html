@@ -1,116 +1,511 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head></head>
-  <body class="antialiased bg-black w-full">
+  <body class="bg-black overflow-x-hidden min-h-screen">
     <div>
       <div
-        class="hidden lg:flex absolute top-0 left-0 w-36 h-36 blur-[140px] bg-gradient-to-r from-red-600 to-red-700 rounded-3xl z-[-1]"
-      ></div>
-      <div
-        class="hidden lg:flex absolute top-96 right-0 w-48 h-48 blur-[180px] bg-gradient-to-r from-red-500 to-pink-700 rounded-3xl z-[-1]"
-      ></div>
-      <div
-        class="hidden lg:flex absolute bottom-0 left-32 w-48 h-48 blur-[180px] bg-gradient-to-r from-red-800 to-pink-900 rounded-3xl z-[-1]"
+        class="flex fixed bottom-0 left-0 w-[50vw] h-[60vh] blur-[180px] bg-gradient-to-l from-red-900/10 to-red-900 rounded-3xl z-[-1]"
       ></div>
     </div>
-    <main class="navbar-container">
-      <nav>
-        <div class="flex items-center">
-          <img class="avatar" src="{{avatar}}" alt="{{username}}'s avatar" />
+    <main class="flex min-w-full min-h-screen">
+      <aside
+        class="flex flex-col justify-between max-w-[260px] w-full min-h-full p-6 sm:w-auto"
+      >
+        <div class="flex flex-col">
+          <div class="flex items-center justify-center">
+            <img
+              class="mb-1 max-w-[160px] hidden sm:block"
+              draggable="false"
+              src="https://r2.interrupted.me/zZz/logo.png"
+              alt="interrupted.me"
+            />
+          </div>
+          <div class="hidden justify-between items-center gap-0 w-full sm:flex">
+            <div
+              class="h-[1px] bg-gradient-to-r from-[#d90f0f2c] to-[#d90f0f80] flex-grow"
+            ></div>
+            <div
+              class="h-[1px] bg-gradient-to-r from-[#d90f0f80] to-[#d90f0f2c] flex-grow"
+            ></div>
+          </div>
+          <div
+            class="flex flex-col justify-start items-start w-full gap-2 mt-4"
+          >
+            <button
+              id="dashboard"
+              type="button"
+              class="w-full flex p-2 nav-active rounded-lg"
+            >
+              <div class="flex items-center justify-center gap-2">
+                <div class="p-2 bg-red-900 rounded-lg">
+                  <svg
+                    class="h-5 w-5 text-gray-300"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    aria-hidden="true"
+                    data-slot="icon"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
+                    ></path>
+                  </svg>
+                </div>
+                <span
+                  class="plus-jakarta-sans text-gray-300 font-semibold text-sm hidden sm:block"
+                  >Dashboard</span
+                >
+              </div>
+            </button>
+            <button
+              id="gallery"
+              type="button"
+              class="w-full flex p-2 rounded-lg"
+            >
+              <div class="flex items-center justify-center gap-2">
+                <div class="p-2 bg-red-900 rounded-lg">
+                  <svg
+                    class="h-5 w-5 fill-gray-300"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 -960 960 960"
+                    fill="none"
+                  >
+                    <path
+                      d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm40-80h480L570-480 450-320l-90-120-120 160Zm-40 80v-560 560Z"
+                    />
+                  </svg>
+                </div>
+                <span
+                  class="plus-jakarta-sans text-gray-300 font-semibold text-sm hidden sm:block"
+                  >Gallery</span
+                >
+              </div>
+            </button>
+          </div>
         </div>
-        <div>
-          <h1 class="nav-text">INTERRUPTED</h1>
+        <div class="flex flex-col h-full w-full justify-end gap-2">
+          <div
+            class="max-h-fit h-full w-full rounded-lg bg-zinc-900/10 relative overflow-hidden"
+          >
+            <div
+              class="absolute inset-0 bg-gradient-radial from-red-900 to-transparent opacity-90 z-[-1]"
+            ></div>
+            <div
+              class="p-2 bg-red-500/20 border border-red-700 w-fit rounded-xl mt-3 ml-3 z-10 relative"
+            >
+              <img
+                draggable="false"
+                class="w-8 h-auto transform -scale-x-100"
+                src="https://r2.interrupted.me/zZz/discord.png"
+                alt="Discord"
+              />
+            </div>
+            <div class="flex flex-col mt-2 ml-3">
+              <h2 class="text-gray-300 font-bold plus-jakarta-sans">
+                Facing issues?
+              </h2>
+              <p class="text-gray-300 plus-jakarta-sans text-xs">
+                Join our Discord community for support.
+              </p>
+            </div>
+            <div class="p-3">
+              <a
+                target="__blank"
+                href="https://discord.gg/6GYbt7CYqW"
+                class="w-full flex items-center justify-center transition-all duration-300 bg-zinc-950/40 hover:bg-zinc-950/70 rounded-lg"
+              >
+                <span class="text-gray-300 py-1">Discord</span>
+              </a>
+            </div>
+          </div>
+          <div class="flex justify-between items-center gap-0 w-full">
+            <div
+              class="h-[1px] bg-gradient-to-r from-[#d90f0f2c] to-[#d90f0f80] flex-grow"
+            ></div>
+            <div
+              class="h-[1px] bg-gradient-to-r from-[#d90f0f80] to-[#d90f0f2c] flex-grow"
+            ></div>
+          </div>
+          <div>
+            <button
+              id="logout"
+              type="button"
+              class="w-full flex p-2 rounded-lg transition-all duration-300 hover:bg-[#991b1b33]"
+            >
+              <div class="flex items-center justify-center gap-2">
+                <div class="p-2 bg-red-900 rounded-lg">
+                  <svg
+                    class="h-5 w-5 text-gray-300"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                    data-slot="icon"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M3 4.25A2.25 2.25 0 0 1 5.25 2h5.5A2.25 2.25 0 0 1 13 4.25v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 0-.75-.75h-5.5a.75.75 0 0 0-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 0 0 .75-.75v-2a.75.75 0 0 1 1.5 0v2A2.25 2.25 0 0 1 10.75 18h-5.5A2.25 2.25 0 0 1 3 15.75V4.25Z"
+                      clip-rule="evenodd"
+                    ></path>
+                    <path
+                      fill-rule="evenodd"
+                      d="M19 10a.75.75 0 0 0-.75-.75H8.704l1.048-.943a.75.75 0 1 0-1.004-1.114l-2.5 2.25a.75.75 0 0 0 0 1.114l2.5 2.25a.75.75 0 1 0 1.004-1.114l-1.048-.943h9.546A.75.75 0 0 0 19 10Z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                </div>
+                <span
+                  class="plus-jakarta-sans text-gray-300 font-semibold text-sm"
+                  >Sign out</span
+                >
+              </div>
+            </button>
+          </div>
         </div>
-        <div class="logout">
-          <h1 id="logout" class="nav-text">Logout</h1>
+      </aside>
+
+      <section
+        id="dashboard-section"
+        class="w-full flex flex-col m-6 ml-0 gap-6"
+      >
+        <div class="flex items-center justify-between gap-3 w-full flex-wrap">
+          <div
+            class="flex justify-between items-center flex-grow gap-1 rounded-lg p-5 bg-gradient-to-r from-red-950/90 to-red-950/10"
+          >
+            <div>
+              <h1
+                class="text-gray-400/80 font-semibold plus-jakarta-sans text-sm"
+              >
+                Uploads
+              </h1>
+              <p class="text-gray-300 font-bold plus-jakarta-sans text-base">
+                {{uploads}}
+              </p>
+            </div>
+            <div>
+              <svg
+                class="h-7 w-7 text-red-500"
+                xmlns="http://www.w3.org/2000/svg"
+                enable-background="new 0 0 24 24"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <g><rect fill="none" height="24" width="24"></rect></g>
+                <g>
+                  <g>
+                    <path
+                      d="M14,2H6C4.9,2,4.01,2.9,4.01,4L4,20c0,1.1,0.89,2,1.99,2H18c1.1,0,2-0.9,2-2V8L14,2z M18,20H6V4h7v5h5V20z M8,15.01 l1.41,1.41L11,14.84V19h2v-4.16l1.59,1.59L16,15.01L12.01,11L8,15.01z"
+                    ></path>
+                  </g>
+                </g>
+              </svg>
+            </div>
+          </div>
+
+          <div
+            class="flex justify-between items-center flex-grow gap-1 rounded-lg p-5 bg-gradient-to-r from-red-950/90 to-red-950/10"
+          >
+            <div>
+              <h1
+                class="text-gray-400/80 font-semibold plus-jakarta-sans text-sm"
+              >
+                Pastes
+              </h1>
+              <p class="text-gray-300 font-bold plus-jakarta-sans text-base">
+                {{pastes}}
+              </p>
+            </div>
+            <div>
+              <svg
+                class="h-7 w-7 fill-red-500"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512"
+              >
+                <path
+                  d="M104.6 48H64C28.7 48 0 76.7 0 112V384c0 35.3 28.7 64 64 64h96V400H64c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H80c0 17.7 14.3 32 32 32h72.4C202 108.4 227.6 96 256 96h62c-7.1-27.6-32.2-48-62-48H215.4C211.6 20.9 188.2 0 160 0s-51.6 20.9-55.4 48zM144 56a16 16 0 1 1 32 0 16 16 0 1 1 -32 0zM448 464H256c-8.8 0-16-7.2-16-16V192c0-8.8 7.2-16 16-16l140.1 0L464 243.9V448c0 8.8-7.2 16-16 16zM256 512H448c35.3 0 64-28.7 64-64V243.9c0-12.7-5.1-24.9-14.1-33.9l-67.9-67.9c-9-9-21.2-14.1-33.9-14.1H256c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+
+          <div
+            class="flex justify-between items-center flex-grow gap-1 rounded-lg p-5 bg-gradient-to-r from-red-950/90 to-red-950/10"
+          >
+            <div>
+              <h1
+                class="text-gray-400/80 font-semibold plus-jakarta-sans text-sm"
+              >
+                Space Consumed
+              </h1>
+              <p class="text-gray-300 font-bold plus-jakarta-sans text-base">
+                {{storage}}
+              </p>
+            </div>
+            <div>
+              <svg
+                class="h-7 w-7 fill-red-500"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M0 0h24v24H0z" fill="none"></path>
+                <path
+                  d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+
+          <div
+            class="flex justify-between items-center flex-grow gap-1 rounded-lg p-5 bg-gradient-to-r from-red-950/90 to-red-950/10"
+          >
+            <div>
+              <h1
+                class="text-gray-400/80 font-semibold plus-jakarta-sans text-sm"
+              >
+                UID
+              </h1>
+              <p class="text-gray-300 font-bold plus-jakarta-sans text-base">
+                {{uid}}
+              </p>
+            </div>
+            <div>
+              <svg
+                class="h-7 w-7 fill-red-500"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 384 512"
+              >
+                <path
+                  d="M256 48l0 16c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32-14.3-32-32l0-16L64 48c-8.8 0-16 7.2-16 16l0 384c0 8.8 7.2 16 16 16l256 0c8.8 0 16-7.2 16-16l0-384c0-8.8-7.2-16-16-16l-64 0zM0 64C0 28.7 28.7 0 64 0L320 0c35.3 0 64 28.7 64 64l0 384c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 64zM160 320l64 0c44.2 0 80 35.8 80 80c0 8.8-7.2 16-16 16L96 416c-8.8 0-16-7.2-16-16c0-44.2 35.8-80 80-80zm-32-96a64 64 0 1 1 128 0 64 64 0 1 1 -128 0z"
+                />
+              </svg>
+            </div>
+          </div>
+
+          <div
+            class="flex justify-between items-center flex-grow gap-1 rounded-lg p-5 bg-gradient-to-r from-red-950/90 to-red-950/10"
+          >
+            <div>
+              <h1
+                class="text-gray-400/80 font-semibold plus-jakarta-sans text-sm"
+              >
+                Joined
+              </h1>
+              <p class="text-gray-300 font-bold plus-jakarta-sans text-base">
+                {{joined}}
+              </p>
+            </div>
+            <div>
+              <svg
+                class="h-7 w-7 fill-red-500"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+                data-slot="icon"
+              >
+                <path
+                  d="M10 9.25a.75.75 0 0 0-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 0 0 .75-.75V10a.75.75 0 0 0-.75-.75H10ZM6 13.25a.75.75 0 0 0-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 0 0 .75-.75V14a.75.75 0 0 0-.75-.75H6ZM8 13.25a.75.75 0 0 0-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 0 0 .75-.75V14a.75.75 0 0 0-.75-.75H8ZM9.25 14a.75.75 0 0 1 .75-.75h.01a.75.75 0 0 1 .75.75v.01a.75.75 0 0 1-.75.75H10a.75.75 0 0 1-.75-.75V14ZM12 11.25a.75.75 0 0 0-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 0 0 .75-.75V12a.75.75 0 0 0-.75-.75H12ZM12 13.25a.75.75 0 0 0-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 0 0 .75-.75V14a.75.75 0 0 0-.75-.75H12ZM13.25 12a.75.75 0 0 1 .75-.75h.01a.75.75 0 0 1 .75.75v.01a.75.75 0 0 1-.75.75H14a.75.75 0 0 1-.75-.75V12ZM11.25 10.005c0-.417.338-.755.755-.755h2a.755.755 0 1 1 0 1.51h-2a.755.755 0 0 1-.755-.755ZM6.005 11.25a.755.755 0 1 0 0 1.51h4a.755.755 0 1 0 0-1.51h-4Z"
+                />
+                <path
+                  fill-rule="evenodd"
+                  d="M5.75 2a.75.75 0 0 1 .75.75V4h7V2.75a.75.75 0 0 1 1.5 0V4h.25A2.75 2.75 0 0 1 18 6.75v8.5A2.75 2.75 0 0 1 15.25 18H4.75A2.75 2.75 0 0 1 2 15.25v-8.5A2.75 2.75 0 0 1 4.75 4H5V2.75A.75.75 0 0 1 5.75 2Zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+          </div>
+
+          <div
+            class="flex justify-between items-center flex-grow gap-1 rounded-lg p-5 bg-gradient-to-r from-red-950/90 to-red-950/10"
+          >
+            <div>
+              <h1
+                class="text-gray-400/80 font-semibold plus-jakarta-sans text-sm"
+              >
+                Users Invited
+              </h1>
+              <p class="text-gray-300 font-bold plus-jakarta-sans text-base">
+                {{invitees}}
+              </p>
+            </div>
+            <div>
+              <svg
+                class="h-7 w-7 text-red-500"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                aria-hidden="true"
+                data-slot="icon"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z"
+                ></path>
+              </svg>
+            </div>
+          </div>
         </div>
-      </nav>
-    </main>
-    <div class="stats-container fade-in">
-      <div class="stat">
-        <h1>Uploads</h1>
-        <p>{{uploads}}</p>
+
+        <div class="flex justify-between items-center flex-wrap gap-6">
+          <div
+            class="flex flex-col bg-gradient-to-br from-red-950/90 to-red-950/10 p-6 flex-grow h-full rounded-lg"
+          >
+            <div>
+              <h1 class="flex flex-col">
+                <span class="text-gray-300 plus-jakarta-sans text-base"
+                  >Welcome back,</span
+                >
+                <span
+                  class="text-white text-2xl plus-jakarta-sans font-semibold"
+                  >{{username}}!</span
+                >
+              </h1>
+            </div>
+            <div class="mt-5">
+              <p class="text-gray-300 plus-jakarta-sans">
+                Ready to upload your files?
+              </p>
+              <div class="flex gap-3 mt-3">
+                <div>
+                  <button
+                    class="bg-red-500 hover:bg-red-400 text-white font-semibold py-2 px-4 rounded-md ring-2 ring-red-400 w-full transition-all duration-300"
+                    id="select-file"
+                  >
+                    Select file
+                  </button>
+                </div>
+                <div>
+                  <button
+                    class="bg-red-500 hover:bg-red-400 text-white font-semibold py-2 px-4 rounded-md ring-2 ring-red-400 w-full transition-all duration-300"
+                    id="capture-screenshot"
+                  >
+                    Capture screenshot
+                  </button>
+                </div>
+              </div>
+              <div id="monitor-list"></div>
+              <div class="h-full mt-5">
+                <h1 class="text-white text-2xl plus-jakarta-sans font-semibold">
+                  URL Shortener
+                </h1>
+                <div class="mt-5">
+                  <p class="text-gray-300 plus-jakarta-sans text-lg">
+                    URL<span class="text-red-600">*</span>
+                  </p>
+                  <input
+                    type="url"
+                    class="w-full bg-red-900/20 text-gray-300 p-2 rounded-lg mt-2 focus:outline-none"
+                    id="shorten-url"
+                    placeholder="URL"
+                  />
+                  <div class="mt-3">
+                    <button
+                      class="bg-red-500 hover:bg-red-400 text-white font-semibold py-2 px-4 rounded-md ring-2 ring-red-400 transition-all duration-300"
+                      id="shorten"
+                    >
+                      Shorten
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="flex flex-col bg-gradient-to-br from-red-950/90 to-red-950/10 p-6 flex-grow h-full rounded-lg"
+          >
+            <div class="h-full">
+              <h1 class="text-white text-2xl plus-jakarta-sans font-semibold">
+                Paste Creator
+              </h1>
+              <p class="text-gray-300 plus-jakarta-sans">
+                Write and upload your pastes here
+              </p>
+            </div>
+            <div class="mt-5 h-full">
+              <div>
+                <p class="text-gray-300 plus-jakarta-sans text-lg">
+                  Title<span class="text-red-600">*</span>
+                </p>
+                <input
+                  type="text"
+                  class="w-full bg-red-900/20 text-gray-300 p-2 rounded-lg mt-2 focus:outline-none"
+                  id="paste-title"
+                  placeholder="Title"
+                />
+              </div>
+              <div class="h-full">
+                <p class="text-gray-300 plus-jakarta-sans text-lg mt-3">
+                  Content<span class="text-red-600">*</span>
+                </p>
+                <textarea
+                  class="w-full bg-red-900/20 text-gray-300 p-2 rounded-lg mt-2 focus:outline-none h-[150px]"
+                  id="paste-content"
+                  placeholder="// Your paste content here..."
+                ></textarea>
+                <div class="mt-3">
+                  <button
+                    class="bg-red-500 hover:bg-red-400 text-white font-semibold py-2 px-4 rounded-md ring-2 ring-red-400 transition-all duration-300"
+                    id="submit-paste"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="gallery-section"
+        class="w-full hidden flex-col m-6 ml-0 gap-6"
+      >
+      <div
+      class="flex flex-col bg-gradient-to-br from-red-950/90 to-red-950/10 p-6 flex-grow h-full rounded-lg"
+    >
+      <div>
+        <h1 class="text-white text-2xl plus-jakarta-sans font-semibold">
+            Gallery
+        </h1>
+        <p class="text-gray-300 plus-jakarta-sans mb-5">
+            Clicking an image will copy the URL to your clipboard
+        </p>
+        <div class="images"></div>
       </div>
-      <div class="stat">
-        <h1>Pastes</h1>
-        <p>{{pastes}}</p>
-      </div>
-      <div class="stat">
-        <h1>Space Consumed</h1>
-        <p>{{storage}}</p>
-      </div>
-      <div class="stat">
-        <h1>UID</h1>
-        <p>{{uid}}</p>
-      </div>
-      <div class="stat">
-        <h1>Joined</h1>
-        <p>{{joined}}</p>
-      </div>
-      <div class="stat">
-        <h1>Users Invited</h1>
-        <p>{{invitees}}</p>
-      </div>
+
     </div>
-    <main class="main-content fade-in">
-      <div id="dashboard-content" class="upload-container dashboard">
-        <div class="upload-contents">
-          <div class="user-info">
-            <h2>Welcome back {{username}}!</h2>
-            <p>Upload your files here</p>
-          </div>
-          <div class="upload">
-            <div>
-              <button id="select-file">Select file</button>
-            </div>
-            <div>
-              <button id="capture-screenshot">Capture screenshot</button>
-            </div>
-          </div>
-          <div id="monitor-list"></div>
-        </div>
-        <div class="paste-container">
-          <h1>Paste Creator</h1>
-          <div class="paste">
-            <p>Title<span class="required">*</span></p>
-            <div class="paste-title-container">
-              <input id="paste-title" class="paste-title" />
-            </div>
-            <p>Content<span class="required">*</span></p>
-            <div class="paste-content">
-              <textarea
-                id="paste-content"
-                placeholder="// Your paste content here..."
-              ></textarea>
-            </div>
-            <br />
-            <div class="paste-actions">
-              <button id="submit-paste">Submit</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="side-content">
-        <div id="gallery-content" class="upload-container">
-          <div class="gallery-contents">
-            <h1>Gallery</h1>
-            <div class="images"></div>
-          </div>
-        </div>
-        <div class="url-shortener">
-          <h1>URL Shortener</h1>
-          <div class="shorten">
-            <p>URL<span class="required">*</span></p>
-            <div class="shorten-url-container">
-              <input type="url" id="shorten-url" class="shorten-url" />
-            </div>
-            <br />
-            <div class="shorten-actions">
-              <button id="shorten">Shorten</button>
-            </div>
-          </div>
-        </div>
-      </div>
+    </section>
     </main>
+    <script>
+      const dashbaordButton = document.getElementById("dashboard");
+      const galleryButton = document.getElementById("gallery");
+
+      const dashboardSection = document.getElementById("dashboard-section");
+      const gallerySection = document.getElementById("gallery-section");
+
+      dashbaordButton.addEventListener("click", () => {
+        dashboardSection.classList.remove("hidden");
+        gallerySection.classList.add("hidden");
+        dashbaordButton.classList.add("nav-active");
+        galleryButton.classList.remove("nav-active");
+      });
+
+      galleryButton.addEventListener("click", () => {
+        dashboardSection.classList.add("hidden");
+        gallerySection.classList.remove("hidden");
+        galleryButton.classList.add("nav-active");
+        dashbaordButton.classList.remove("nav-active");
+      });
+    </script>
   </body>
 </html>

@@ -46,8 +46,8 @@ attachEventListener("capture-screenshot", "click", () => {
     monitors.forEach((monitor, index) => {
       const monitorDiv = document.createElement("div");
       monitorDiv.innerHTML = `
-        <p>Monitor ${index}: ${monitor.width}x${monitor.height}</p>
-        <button onclick="screenshot(${index})">Capture Screenshot</button>
+        <p class="text-gray-300 plus-jakarta-sans">Monitor ${index}: ${monitor.width}x${monitor.height}</p>
+        <button class="bg-red-500 hover:bg-red-400 text-white font-semibold py-2 px-4 rounded-md ring-2 ring-red-400 transition-all duration-300" onclick="screenshot(${index})">Capture Screenshot</button>
       `;
       monitorList.appendChild(monitorDiv);
     });
