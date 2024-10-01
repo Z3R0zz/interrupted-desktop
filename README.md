@@ -19,7 +19,7 @@
         interrupted.exe
         ```
 ### Linux
-1. Install Dependencies:
+1. Install Dependencies (on arch based distros you might need [webkit2gtk](https://archlinux.org/packages/extra/x86_64/webkit2gtk/)):
 ```
 sudo apt-get update
 sudo apt-get install -y libgtk-3-dev
