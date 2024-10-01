@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	Subdirectory   = ".interrupted"
+	Subdirectory   = "interrupted"
 	apiKeyFileName = "api_key"
 )
 
