@@ -11,11 +11,9 @@
 
 ## Installation
 ### Windows
-1. Install Dependencies:
-    - Use a package manager like [vcpkg](https://github.com/microsoft/vcpkg) to install GTK+ 3. You can follow the instructions on the vcpkg GitHub page for setup.
-2. Download the Latest Version:
+1. Download the Latest Version:
     - Download the latest release of the application.
-3. Run the Application:
+2. Run the Application:
     - Simply double-click `interrupted.exe` in Windows Explorer, or run it from the command line:
         ```
         interrupted.exe
